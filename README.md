@@ -78,29 +78,3 @@ flowchart TD
     J --> K[预测内固醇相关分子<br/>关键候选基因]
     K --> L[模型评估: AUC, F1, 准确率]
     L --> M[输出分子列表 & 可视化]
-
----
-
-##  📁 仓库结构
-
-SRNL/
-├── index.html                 # 🌐 GitHub Pages 主页面
-├── README.md                  # 📖 项目说明文档
-├── LICENSE                    # ⚖️ MIT 许可证
-├── .gitignore                 # 🚫 Git 忽略文件
-│
-├── scripts/                   # 🛠️ 预处理与分析脚本
-│   ├── 01_QC_preprocessing.sh
-│   ├── 02_scRNA_integration.R
-│   ├── 03_bulk_sc_merge.R
-│   ├── 04_random_forest.py
-│   ├── 05_shap_analysis.R
-│   └── run_all.sh
-│
-├── data/                      # 💾 数据目录
-│   └── clinical_metadata.csv
-│
-├── results/                   # 📊 输出结果
-│   └── figures/
-│
-└── environment.yml            # 🐍 Conda/R 环境依赖
