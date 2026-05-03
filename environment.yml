@@ -1,0 +1,22 @@
+name: nafld-rf
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python=3.9
+  - r-base=4.2
+  - r-tidyverse
+  - r-seurat
+  - r-randomforest
+  - r-pROC
+  - numpy
+  - pandas
+  - scikit-learn
+  - shap
+  - matplotlib
+  - seaborn
+  - pip
+  - pip:
+    - scanpy
+    - anndata
