@@ -212,6 +212,7 @@ SRNL/
 ├── results/            # 📊 Analysis output results
 ├── docs/               # 📚 Supplementary documents
 └── environment.yml     # 🐍 Conda environment configuration
+```
 
 ---
 
