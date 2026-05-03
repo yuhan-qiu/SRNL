@@ -7,7 +7,7 @@
 [![NAFLD](https://img.shields.io/badge/NAFLD-Menopause-orange.svg)](https://www.niddk.nih.gov/health-information/liver-disease/nafld)
 [![Hormone Therapy](https://img.shields.io/badge/Hormone%20Therapy-Response%20Prediction-ff69b4.svg)]()
 
-> **整合22840例临床样本 + 502例转录组 + 16万单细胞数据，通过7种AI算法构建绝经女性NAFLD激素治疗响应预测模型（SRNL）**
+> **整合22,840例临床样本 + 502例转录组 + 16万单细胞数据，通过7种AI算法构建绝经女性NAFLD激素治疗响应预测模型（SRNL）**
 
 <div align="center">
   <img src="https://img.shields.io/badge/Status-Active-success" alt="Status">
@@ -24,14 +24,14 @@
 - [研究背景](#-研究背景)
 - [核心发现](#-核心发现)
 - [数据概览](#-数据概览)
-- [分析流程](#-分析流程)
-- [模型构建](#-模型构建-srnl)
+- [单细胞质控](#-单细胞数据质控)
+- [关键结果](#-关键结果)
+- [代谢通路富集](#-代谢通路富集分析)
+- [模型构建](#-模型构建--srnl)
 - [临床转化](#-临床转化)
 - [仓库结构](#-仓库结构)
 - [快速开始](#-快速开始)
-- [关键结果](#-关键结果)
-- [模型性能](#-模型性能)
-- [可视化图集](#-可视化图集-20张)
+- [可视化图集](#-可视化图集)
 - [引用](#-引用)
 - [联系方式](#-联系方式)
 
@@ -69,12 +69,6 @@
 > - 脂质代谢紊乱
 > - 细胞色素P450家族异常表达
 
-### 4️⃣ AI预测模型
-> 构建**SRNL（Steroid Response NAFLD model）**模型，基于SHAP分析发现**CYP2C19**是核心贡献基因，该基因为激素治疗药物**戊酸雌二醇**与**雷洛昔芬**的作用靶点。
-
-### 5️⃣ 临床转化
-> 外源性激素治疗可**显著改善绝经女性NAFLD患者肝功能**（降低AST、升高ALB），SRNL模型可**量化CYP2C19贡献值**，辅助治疗决策。
-
 ---
 
 ## 📊 数据概览
@@ -88,29 +82,91 @@
 
 ---
 
-## 🔄 分析流程
+## 🔬 单细胞数据质控
 
-```mermaid
-flowchart TD
-    A[多中心临床队列<br/>22,840例] --> B{激素与肝功能关联分析}
-    B --> C[雌激素 ↓ → ALB ↓]
-    
-    D[bulk RNA-seq<br/>502例] --> E[差异表达分析]
-    E --> F[类固醇代谢通路富集<br/>P450家族下调]
-    
-    G[scRNA-seq<br/>16万细胞] --> H[单细胞图谱构建]
-    H --> I[细胞亚群特异性表达]
-    
-    F --> J[SRNL模型构建]
-    I --> J
-    C --> J
-    
-    J --> K[7种AI算法对比]
-    K --> L[SHAP可解释性分析]
-    L --> M[核心基因: CYP2C19]
-    
-    M --> N[基因-药物靶点分析]
-    N --> O[戊酸雌二醇 / 雷洛昔芬]
-    
-    O --> P[临床队列验证<br/>激素治疗改善肝功能]
-    P --> Q[SRNL辅助疗效预测决策]
+下图展示了scRNA-seq数据的质控指标，包括**每个细胞的基因数（nFeature_RNA）**、**UMI计数（nCount_RNA）**、**线粒体基因比例（percent.mt）**和**血红蛋白基因比例（percent.HBG）**。质控后筛选高质量细胞用于下游分析。
+
+<div align="center">
+  <img src="results/figures/01.png" alt="单细胞质控图" width="80%">
+  <br>
+  <sub>图1：单细胞数据质控 - nFeature_RNA, nCount_RNA, percent.mt, percent.HBG分布</sub>
+</div>
+
+---
+
+## 📊 关键结果
+
+### CYP450家族差异表达分析
+
+下图展示了**绝经女性 vs 育龄女性**NAFLD患者中CYP450家族基因的表达差异。结果显示，多个CYP家族基因在绝经女性中显著下调，提示**雌激素缺乏介导的CYP450表达下调是绝经女性NAFLD高发的核心分子机制**。
+
+<div align="center">
+  <img src="results/figures/05.png" alt="CYP家族差异表达火山图" width="80%">
+  <br>
+  <sub>图2：CYP450家族差异表达火山图（Log₂ Fold Change vs -Log₁₀ P-value）</sub>
+</div>
+
+**关键差异基因**：
+
+| 基因 | Log₂FC | -Log₁₀ P | 调控方向 | 功能 |
+|------|:------:|:--------:|:--------:|------|
+| CYP4F1 | 2.8 | 11.5 | ↑ 上调 | 脂肪酸代谢 |
+| CYP7A1 | 0.6 | 10.5 | ↑ 上调 | 胆汁酸合成 |
+| CYP2C9 | 0.4 | 9.5 | ↓ 下调 | 药物代谢 |
+| CYP2C19 | -0.2 | 5.0 | ↓ 下调 | **激素治疗靶点** |
+
+---
+
+## 🧬 代谢通路富集分析
+
+GO功能富集分析显示，绝经女性NAFLD相关的差异基因显著富集于以下通路：
+
+<div align="center">
+  <img src="results/figures/06.png" alt="代谢通路富集分析" width="80%">
+  <br>
+  <sub>图3：GO代谢通路富集分析 - Top 20显著富集通路</sub>
+</div>
+
+**Top 5 显著富集通路**：
+
+| 排名 | GO通路 | 功能描述 | FDR |
+|:----:|--------|----------|:---:|
+| 1 | small molecule catabolic process | 小分子分解代谢 | < 0.01 |
+| 2 | organic acid catabolic process | 有机酸分解代谢 | < 0.01 |
+| 3 | **steroid response to xenobiotic stimulus** | **类固醇对异生物质刺激的响应** | < 0.01 |
+| 4 | lipid catabolic process | 脂质分解代谢 | < 0.01 |
+| 5 | fatty acid metabolic process | 脂肪酸代谢 | < 0.01 |
+
+> **关键发现**：`steroid response to xenobiotic stimulus`（类固醇对异生物质刺激的响应）通路显著富集，直接支持**类固醇代谢紊乱是绝经女性NAFLD核心机制**的结论。
+
+---
+
+## 🤖 模型构建 · SRNL
+
+### 7种AI算法对比
+
+| 模型 | 类型 | AUC | 特点 |
+|------|------|:----:|------|
+| **SRNL (集成)** | Stacking Ensemble | **0.94** | 最优性能 |
+| XGBoost | Tree-based | 0.92 | 快速训练 |
+| Random Forest | Bagging | 0.91 | 高鲁棒性 |
+| LightGBM | Gradient Boosting | 0.91 | 内存高效 |
+| SVM | Kernel | 0.87 | 小样本适配 |
+| Logistic Regression | Linear | 0.84 | 基线模型 |
+| Neural Network | Deep Learning | 0.89 | 复杂模式 |
+
+### SHAP 核心特征贡献度
+
+| 排名 | 基因 | 功能 | SHAP值 |
+|:----:|------|------|:------:|
+| 1 | **CYP2C19** | 细胞色素P450家族，药物代谢 | **0.156** |
+| 2 | CYP7A1 | 胆汁酸合成限速酶 | 0.089 |
+| 3 | ESR1 | 雌激素受体α | 0.072 |
+| 4 | HSD17B10 | 类固醇脱氢酶 | 0.058 |
+| 5 | SCARB1 | 胆固醇摄取受体 | 0.045 |
+
+---
+
+## 💊 临床转化
+
+### 基因-药物靶点
