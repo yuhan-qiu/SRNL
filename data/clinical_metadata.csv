@@ -1,0 +1,11 @@
+sample_id,age,condition,bmi,menopause_status
+NAFLD_001,52,Normal,23.5,post
+NAFLD_002,48,Steatosis,27.8,peri
+NAFLD_003,55,Steatohepatitis,31.2,post
+NAFLD_004,50,Normal,24.1,post
+NAFLD_005,47,Steatosis,28.5,peri
+NAFLD_006,58,Steatohepatitis,32.0,post
+NAFLD_007,53,Steatosis,26.9,post
+NAFLD_008,49,Normal,22.8,peri
+NAFLD_009,56,Steatohepatitis,30.5,post
+NAFLD_010,51,Steatosis,27.2,peri
