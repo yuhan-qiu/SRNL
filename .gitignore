@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.Python
+env/
+venv/
+.venv/
+
+# R
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.Rproj
+
+# Data files (large)
+*.fastq.gz
+*.bam
+*.sam
+*.bai
+
+# IDE
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Outputs
+*.pkl
+*.rds
